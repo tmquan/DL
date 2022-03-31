@@ -517,30 +517,32 @@ class SingleClassPixelBasedDataModule(PairedDataModule):
         )
 
 if __name__ == '__main__':
-    set_determinism(seed=42)
-    datamodule = PairedDataModule(
-        train_image_dirs=[],
-        train_label_dirs=[],
-        val_image_dirs=[],
-        val_label_dirs=[],
-        test_image_dirs=[],
-        test_label_dirs=[],
-    )
-    datamodule.prepare_data()
-    datamodule.setup()
-    # print(datamodule.train_dataloader())
-    # datamodule.teardown()
-    # print(datamodule.train_dataloader())
+    pass
+    # ###############################################################################
+    # set_determinism(seed=42)
+    # datamodule = PairedDataModule(
+    #     train_image_dirs=[],
+    #     train_label_dirs=[],
+    #     val_image_dirs=[],
+    #     val_label_dirs=[],
+    #     test_image_dirs=[],
+    #     test_label_dirs=[],
+    # )
+    # datamodule.prepare_data()
+    # datamodule.setup()
+    # # print(datamodule.train_dataloader())
+    # # datamodule.teardown()
+    # # print(datamodule.train_dataloader())
 
-    ###############################################################################
-    set_determinism(seed=42)
-    datamodule = SingleClassPixelBasedDataModule(
-        train_image_dirs=[],
-        train_label_dirs=[],
-        val_image_dirs=[],
-        val_label_dirs=[],
-        test_image_dirs=[],
-        test_label_dirs=[],
-    )
-    datamodule.prepare_data()
-    datamodule.setup()
+    # ###############################################################################
+    # set_determinism(seed=42)
+    # datamodule = SingleClassPixelBasedDataModule(
+    #     train_image_dirs=[],
+    #     train_label_dirs=[],
+    #     val_image_dirs=[],
+    #     val_label_dirs=[],
+    #     test_image_dirs=[],
+    #     test_label_dirs=[],
+    # )
+    # datamodule.prepare_data()
+    # datamodule.setup()
