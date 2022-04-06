@@ -144,7 +144,7 @@ def create_pseudo_image_2d(
         
     elif shape_type=="bar":
         insts = np.zeros((0, height, width), dtype=np.uint8)
-        for _ in range(num_objs):
+        for color in range(1, num_objs+1):
             x = np.random.randint(int(width/8), int(7*width/8))
             y = np.random.randint(int(height/8), int(7*height/8))
             w = 15
@@ -164,14 +164,16 @@ def create_pseudo_image_2d(
             else:
                 # image = cv2.fillPoly(image, [box], rs.random() * 0.5 + 0.5)
                 gt = np.zeros_like(image)
-                gt = cv2.fillPoly(gt, [box], rs.random() * 0.5 + 0.5)
+                # gt = cv2.fillPoly(gt, [box], rs.random() * 0.5 + 0.5)
+                # print(color)
+                gt = cv2.fillPoly(gt, [box], color)
                 insts[:, gt != 0] = 0
                 insts = np.concatenate([insts, gt[np.newaxis]])
                 image = cv2.fillPoly(image, [box], 255)
                 image = cv2.drawContours(image, [box], 0, 0, 2)
 
         # labels = np.ceil(image).astype(np.int32, copy=False)
-        labels = np.max(insts, 0)
+        labels = np.max(insts, 0) #.astype(np.int32, copy=False)
         image = cv2.drawContours(image, [box], 0, 0, 2)
         image[labels==0] = 255
         norm = rs.uniform(0, num_seg_classes * noise_max, size=image.shape)
