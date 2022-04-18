@@ -56,7 +56,13 @@ class DiscriminativeLoss(nn.Module):
                 b_var_loss = 0
                 # for c in range(C-1):
                     # b_var_loss += (torch.clamp(torch.norm(mu_c - x_c, dim=1) - 0.5, min=0) ** 2).mean()
-                b_var_loss += (torch.clamp(torch.norm(means - embed, dim=1) - delta_v, min=0) ** 2).mean()
+                # b_var_loss += (torch.clamp(torch.norm(means - embed, dim=1) - delta_v, min=0) ** 2).mean()
+                for value in b_value:
+                    b_mask_ = (value == b_label).expand(1, F, -1)
+                    # b_means = b_embed[b_mask_].means(axis=(-1, -2), keepdim=True)
+                    m_means = torch.masked_select(b_embed, b_mask_).view(1, F, -1).mean(dim=-1, keepdim=True) # 1 x F x S < HW
+                    m_embed = torch.masked_select(b_embed, b_mask_).view(1, F, -1) # 1 x F x S < HW
+                    b_var_loss += (torch.clamp(torch.norm(m_means - m_embed, dim=1) - delta_v, min=0) ** 2).mean()
                 b_var_loss /= C
             else:
                 b_var_loss = 0

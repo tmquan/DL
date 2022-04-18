@@ -214,10 +214,16 @@ class PseudoDataModule(LightningDataModule):
         num_objects = 8
         height = 256
         width = 256
+        print(size)
         for _ in range(size):
             # image, label = create_test_image_2d(width=256, height=256, channel_dim=0)
             # label = (image > 0).astype(np.float32)
-            
+            image, label = create_pseudo_image_2d(width=256, height=256, 
+                noise_max=0.5, 
+                num_seg_classes=1, 
+                num_objs=8
+            )
+
             images.extend(image)
             labels.extend(label)
         data_dicts = [
@@ -519,22 +525,17 @@ class SingleClassPixelBasedDataModule(PairedDataModule):
         )
 
 if __name__ == '__main__':
-    pass
+    # pass
     # ###############################################################################
-    # set_determinism(seed=42)
-    # datamodule = PairedDataModule(
-    #     train_image_dirs=[],
-    #     train_label_dirs=[],
-    #     val_image_dirs=[],
-    #     val_label_dirs=[],
-    #     test_image_dirs=[],
-    #     test_label_dirs=[],
-    # )
-    # datamodule.prepare_data()
-    # datamodule.setup()
-    # # print(datamodule.train_dataloader())
-    # # datamodule.teardown()
-    # # print(datamodule.train_dataloader())
+    set_determinism(seed=42)
+    datamodule = PseudoDataModule(
+        batch_size=32
+    )
+    datamodule.prepare_data()
+    datamodule.setup()
+    # print(datamodule.train_dataloader())
+    # datamodule.teardown()
+    # print(datamodule.train_dataloader())
 
     # ###############################################################################
     # set_determinism(seed=42)
