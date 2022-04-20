@@ -5,6 +5,7 @@ from typing import Any, Callable, Dict, List, Tuple, Optional
 
 import cv2 
 
+import torch
 from torch.utils.data import Dataset, DataLoader
 
 from pytorch_lightning import LightningDataModule
@@ -214,7 +215,7 @@ class PseudoDataModule(LightningDataModule):
         num_objects = 8
         height = 256
         width = 256
-        print(size)
+        
         for _ in range(size):
             # image, label = create_test_image_2d(width=256, height=256, channel_dim=0)
             # label = (image > 0).astype(np.float32)
@@ -224,8 +225,10 @@ class PseudoDataModule(LightningDataModule):
                 num_objs=8
             )
 
-            images.extend(image)
-            labels.extend(label)
+            images.append(image)
+            labels.append(label)
+
+        print(size, image.shape, label.shape)
         data_dicts = [
             {"image": image,  
              "label": label} for image, label in zip(images, labels)
@@ -252,8 +255,9 @@ class PseudoDataModule(LightningDataModule):
         train_transforms = Compose(
             [
                 # Basic Augmentationm
-                AddChanneld(keys=["image", "label"]),
-                ToTensord(keys=["image", "label"]),
+                AddChanneld(keys=["image"]),
+                ToTensord(keys=["image"]),
+                ToTensord(keys=["label"], dtype=torch.int64),
             ]
         )
         return self._shared_dataloader(self.train_data_dicts, 
@@ -267,8 +271,9 @@ class PseudoDataModule(LightningDataModule):
         val_transforms = Compose(
             [
                 # Basic Augmentationm
-                AddChanneld(keys=["image", "label"]),
-                ToTensord(keys=["image", "label"]),
+                AddChanneld(keys=["image"]),
+                ToTensord(keys=["image"]),
+                ToTensord(keys=["label"], dtype=torch.int64),
             ]
         )
         return self._shared_dataloader(self.val_data_dicts, 
@@ -282,8 +287,9 @@ class PseudoDataModule(LightningDataModule):
         test_transforms = Compose(
             [
                 # Basic Augmentationm
-                AddChanneld(keys=["image", "label"]),
-                ToTensord(keys=["image", "label"]),
+                AddChanneld(keys=["image"]),
+                ToTensord(keys=["image"]),
+                ToTensord(keys=["label"], dtype=torch.int64),
             ]
         )
         return self._shared_dataloader(self.test_data_dicts, 
